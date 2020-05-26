@@ -23,39 +23,37 @@ module CheckLibrary
     end
   end
 
-
-
-#-----------------------------------------------
-
-def load_save_file(saved_files, input)
-  data = YAML.load(File.read("saved-games/#{saved_files[input]}"))
-  @wrong_answers = data[:wrong_answers]
-  @word_to_guess = data[:word_to_guess]
-  @guess = data[:guess]
-end
-
-def load_game
-  Display.clear
-  saved_files = Dir.children('saved-games')
-  puts print_files(saved_files)
-
-  question = "Enter the number of the file you would like to load : "
-  condition = Proc.new { |input| return load_save_file(saved_files, input.to_i) if (0...saved_files.length).include?(input.to_i) }
-  check_input(question, condition)
-end
-
-def print_files(saved_files)
-  string = ""
-  saved_files.each_with_index do |file_name, index|
-    string += "    [#{index}] #{file_name}\n"
+  def load_save_file(saved_files, input)
+    data = YAML.load(File.read("saved-games/#{saved_files[input]}"))
+    @wrong_answers = data[:wrong_answers]
+    @word_to_guess = data[:word_to_guess]
+    @guess = data[:guess]
   end
-  string
-end
 
+  def load_game
+    Display.clear
+    no_files if Dir.exist?('saved-games') || Dir.children('saved-games').length == 0
+    saved_files = Dir.children('saved-games')
+    puts print_files(saved_files)
 
+    question = "Enter the number of the file you would like to load : "
+    condition = Proc.new { |input| return load_save_file(saved_files, input.to_i) if (0...saved_files.length).include?(input.to_i) }
+    check_input(question, condition)
+  end
 
-#-----------------------------------------------
+  def no_files
+    puts "There is no file to load"
+    sleep(2)
+    menu
+  end
 
+  def print_files(saved_files)
+    string = ""
+    saved_files.each_with_index do |file_name, index|
+      string += "    [#{index}] #{file_name}\n"
+    end
+    string
+  end
 
   def current_data
     data = {

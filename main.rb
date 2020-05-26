@@ -1,5 +1,4 @@
 require 'bundler/inline'
-require 'pry'
 
 gemfile true do
  source 'http://rubygems.org'

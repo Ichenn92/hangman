@@ -32,7 +32,9 @@ module CheckLibrary
 
   def load_game
     Display.clear
-    no_files if Dir.exist?('saved-games') || Dir.children('saved-games').length == 0
+    no_files unless Dir.exist?('saved-games')
+    no_files if Dir.children('saved-games').length == 0
+    
     saved_files = Dir.children('saved-games')
     puts print_files(saved_files)
 
